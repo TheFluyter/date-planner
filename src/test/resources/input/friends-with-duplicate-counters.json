@@ -1,0 +1,19 @@
+{
+  "friends": [
+    {
+      "name": "Henk",
+      "date-counter": 1,
+      "last-date": "2024-11-12"
+    },
+    {
+      "name": "Jaap",
+      "date-counter": 3,
+      "last-date": "2024-11-17"
+    },
+    {
+      "name": "Karel",
+      "date-counter": 1,
+      "last-date": "2024-11-16"
+    }
+  ]
+}
