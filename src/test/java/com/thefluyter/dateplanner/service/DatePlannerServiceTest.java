@@ -30,11 +30,6 @@ class DatePlannerServiceTest {
         datePlannerService = new DatePlannerService(objectMapper);
     }
 
-    @BeforeEach
-    void initialize() throws IOException {
-        Files.writeString(TMP_JSON_PATH, createTmpJson());
-    }
-
     @AfterEach
     void cleanup() throws IOException {
         Files.deleteIfExists(TMP_JSON_PATH);
@@ -54,6 +49,7 @@ class DatePlannerServiceTest {
 
     @Test
     void testRecordPlannedDate_shouldUpdateDateAndCounter() throws IOException {
+        Files.writeString(TMP_JSON_PATH, createTmpJson());
         datePlannerService.recordPlannedDate(TMP_JSON, "Henk");
 
         String json = Files.readString(TMP_JSON_PATH);

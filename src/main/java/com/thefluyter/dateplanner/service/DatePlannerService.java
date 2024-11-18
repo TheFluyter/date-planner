@@ -26,7 +26,8 @@ public class DatePlannerService {
     }
 
     public void recordPlannedDate(String pathToFriendsJson, String name) throws IOException {
-        String json = Files.readString(Path.of(pathToFriendsJson));
+        Path path = Path.of(pathToFriendsJson);
+        String json = Files.readString(path);
         Friends friends = objectMapper.readValue(json, Friends.class);
 
         for (Friend friend : friends.getFriendList()) {
@@ -39,7 +40,7 @@ public class DatePlannerService {
 
         ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
         String updatedJson = writer.writeValueAsString(friends);
-        Files.write(Path.of(pathToFriendsJson), updatedJson.getBytes());
+        Files.write(path, updatedJson.getBytes());
     }
 
 }
