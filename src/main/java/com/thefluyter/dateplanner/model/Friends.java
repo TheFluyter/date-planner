@@ -18,6 +18,13 @@ public class Friends {
     @JsonProperty("friends")
     private List<Friend> friendList;
 
+    public Friend getFriend(String name) {
+        return friendList.stream()
+            .filter(friend -> friend.getName().equals(name))
+            .findFirst()
+            .orElse(null);
+    }
+
     public Friend selectFriendToPlanWith() {
         Friends friendsWithLowestCounter = findFriendsWithLowestCounter();
         if (friendsWithLowestCounter.getFriendList().size() == 1) {
@@ -25,11 +32,7 @@ public class Friends {
         }
 
         Friends friendsWithLatestDate = friendsWithLowestCounter.findFriendsWithOldestDate();
-        if (friendsWithLatestDate.getFriendList().size() == 1) {
-            return friendsWithLatestDate.getFriendList().getFirst();
-        }
-
-        return null;
+        return friendsWithLatestDate.getFriendList().getFirst();
     }
 
     public Friends findFriendsWithLowestCounter() {

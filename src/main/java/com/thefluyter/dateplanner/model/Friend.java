@@ -25,4 +25,11 @@ public class Friend {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate lastDate;
 
+    public void updateDateCounter() {
+        dateCounter++;
+    }
+
+    public void updateDateToToday() {
+        lastDate = LocalDate.now();
+    }
 }
