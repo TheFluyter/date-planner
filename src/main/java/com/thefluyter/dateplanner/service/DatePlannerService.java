@@ -2,6 +2,7 @@ package com.thefluyter.dateplanner.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.thefluyter.dateplanner.exception.FriendPlanningException;
 import com.thefluyter.dateplanner.model.Friend;
 import com.thefluyter.dateplanner.model.Friends;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,14 @@ public class DatePlannerService {
         this.objectMapper = objectMapper;
     }
 
-    public Friend planDate(String pathToFriendsJson) throws IOException {
-        String json = Files.readString(Path.of(pathToFriendsJson));
-        Friends friends = objectMapper.readValue(json, Friends.class);
-        return friends.selectFriendToPlanWith();
+    public Friend planDate(String pathToFriendsJson) {
+        try {
+            String json = Files.readString(Path.of(pathToFriendsJson));
+            Friends friends = objectMapper.readValue(json, Friends.class);
+            return friends.selectFriendToPlanWith();
+        } catch (IOException e) {
+            throw new FriendPlanningException("Failed to plan a date with friends due to an I/O error:" + e.getMessage());
+        }
     }
 
     public void recordPlannedDate(String pathToFriendsJson, String name) throws IOException {
