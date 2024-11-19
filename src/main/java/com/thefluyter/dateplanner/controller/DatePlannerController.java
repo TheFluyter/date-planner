@@ -8,10 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping()
 @Slf4j
 public class DatePlannerController {
 
@@ -24,11 +23,16 @@ public class DatePlannerController {
         this.datePlannerService = datePlannerService;
     }
 
-    @GetMapping("/friends-page")
-    public String planDate(Model model) {
+    @GetMapping("/")
+    public String index(Model model) {
+        return "index";
+    }
+
+    @GetMapping("/plan-date")
+    public String planDateDetails(Model model) {
         Friend friend = datePlannerService.planDate(jsonPath);
         log.info("Friend to plan date with: {}", friend.getName());
         model.addAttribute("friend", friend);
-        return "friends";
+        return "plan-date";
     }
 }
