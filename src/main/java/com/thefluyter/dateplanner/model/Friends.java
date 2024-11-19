@@ -35,7 +35,7 @@ public class Friends {
         return friendsWithLatestDate.getFriendList().getFirst();
     }
 
-    public Friends findFriendsWithLowestCounter() {
+    private Friends findFriendsWithLowestCounter() {
         int minCounter = friendList.stream()
             .mapToInt(Friend::getDateCounter)
             .min()
