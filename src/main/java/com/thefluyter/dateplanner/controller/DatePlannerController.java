@@ -43,13 +43,13 @@ public class DatePlannerController {
         return "plan-date";
     }
 
-    @GetMapping("/overview")
+    @GetMapping("/friends-overview")
     public String overview(Model model) {
         List<Friend> friends = datePlannerService.getAllFriends(jsonPath);
         friends.sort(Comparator.comparingInt(Friend::getDateCounter)
             .thenComparing(Friend::getLastDate));
         model.addAttribute("friends", friends);
-        return "overview";
+        return "friends-overview";
     }
 
     @PostMapping("/record-date")
