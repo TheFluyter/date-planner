@@ -29,7 +29,7 @@ public class Friend {
         dateCounter++;
     }
 
-    public void updateDateToToday() {
-        lastDate = LocalDate.now();
+    public void updateLastDate(LocalDate newDate) {
+        lastDate = newDate;
     }
 }

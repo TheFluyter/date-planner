@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -41,7 +42,7 @@ public class DatePlannerService {
         }
     }
 
-    public void recordPlannedDate(String pathToFriendsJson, String name) {
+    public void recordPlannedDate(String pathToFriendsJson, String name, LocalDate newDate) {
         Path path = Path.of(pathToFriendsJson);
         String json;
         Friends friends;
@@ -55,7 +56,7 @@ public class DatePlannerService {
         for (Friend friend : friends.getFriendList()) {
             if (name.equals(friend.getName())) {
                 friend.updateDateCounter();
-                friend.updateDateToToday();
+                friend.updateLastDate(newDate);
                 break;
             }
         }

@@ -4,6 +4,7 @@ import com.thefluyter.dateplanner.model.Friend;
 import com.thefluyter.dateplanner.service.DatePlannerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class DatePlannerController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index() {
         return "index";
     }
 
@@ -51,8 +53,9 @@ public class DatePlannerController {
     }
 
     @PostMapping("/record-date")
-    public String recordDate(@RequestParam("friendName") String friendName) {
-        datePlannerService.recordPlannedDate(jsonPath, friendName);
+    public String recordDate(@RequestParam("friendName") String friendName,
+                             @RequestParam("plannedDate") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate plannedDate) {
+        datePlannerService.recordPlannedDate(jsonPath, friendName, plannedDate);
         return "redirect:/";
     }
 }

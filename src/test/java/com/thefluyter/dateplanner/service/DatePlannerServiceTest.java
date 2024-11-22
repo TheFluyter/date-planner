@@ -36,13 +36,13 @@ class DatePlannerServiceTest {
     }
 
     @Test
-    void testUniqueValues_shouldReturnFriendWithLowestCounter() throws IOException {
+    void testUniqueValues_shouldReturnFriendWithLowestCounter() {
         Friend friend = datePlannerService.planDate("src/test/resources/input/friends-with-unique-values.json");
         assertEquals("Karel", friend.getName());
     }
 
     @Test
-    void testDuplicateLowestCounter_shouldReturnFriendWithOldestDate() throws IOException {
+    void testDuplicateLowestCounter_shouldReturnFriendWithOldestDate() {
         Friend friend = datePlannerService.planDate("src/test/resources/input/friends-with-duplicate-counters.json");
         assertEquals("Henk", friend.getName());
     }
@@ -50,7 +50,7 @@ class DatePlannerServiceTest {
     @Test
     void testRecordPlannedDate_shouldUpdateDateAndCounter() throws IOException {
         Files.writeString(TMP_JSON_PATH, createTmpJson());
-        datePlannerService.recordPlannedDate(TMP_JSON, "Henk");
+        datePlannerService.recordPlannedDate(TMP_JSON, "Henk", LocalDate.now());
 
         String json = Files.readString(TMP_JSON_PATH);
         Friends friends = objectMapper.readValue(json, Friends.class);
