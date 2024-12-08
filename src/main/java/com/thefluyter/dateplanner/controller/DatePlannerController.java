@@ -46,8 +46,10 @@ public class DatePlannerController {
     @GetMapping("/friends-overview")
     public String overview(Model model) {
         List<Friend> friends = datePlannerService.getAllFriends(jsonPath);
-        friends.sort(Comparator.comparingInt(Friend::getDateCounter)
-            .thenComparing(Friend::getLastDate));
+        friends.sort(Comparator
+            .comparingInt(Friend::getDateCounter)
+            .thenComparing(Friend::getLastDate)
+            .thenComparing(Friend::getName));
         model.addAttribute("friends", friends);
         return "friends-overview";
     }
