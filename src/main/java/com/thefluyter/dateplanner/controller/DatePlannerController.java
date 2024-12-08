@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -57,7 +58,8 @@ public class DatePlannerController {
     @PostMapping("/record-date")
     public String recordDate(@RequestParam("friendName") String friendName,
                              @RequestParam("plannedDate") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate plannedDate) {
-        datePlannerService.recordPlannedDate(jsonPath, friendName, plannedDate);
+        Path path = Path.of(jsonPath);
+        datePlannerService.recordPlannedDate(path, friendName, plannedDate);
         return "redirect:/";
     }
 }

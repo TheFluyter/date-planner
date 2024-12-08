@@ -3,6 +3,7 @@ package com.thefluyter.dateplanner.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.thefluyter.dateplanner.exception.FriendPlanningException;
 import com.thefluyter.dateplanner.model.Friend;
 import com.thefluyter.dateplanner.model.Friends;
 import org.junit.jupiter.api.*;
@@ -11,8 +12,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DatePlannerServiceTest {
 
@@ -36,6 +39,22 @@ class DatePlannerServiceTest {
     }
 
     @Test
+    void testGetAllFriends_shouldReturnFriendList() throws IOException {
+        Files.writeString(TMP_JSON_PATH, createTmpJson());
+        List<Friend> friends = datePlannerService.getAllFriends(TMP_JSON);
+
+        assertEquals(1, friends.size());
+        assertEquals("Henk", friends.getFirst().getName());
+    }
+
+    @Test
+    void invalidJsonPath_shouldThrowException() {
+        assertThrows(FriendPlanningException.class, () -> datePlannerService.getAllFriends("invalid.json"));
+        assertThrows(FriendPlanningException.class, () -> datePlannerService.planDate("invalid.json"));
+        assertThrows(FriendPlanningException.class, () -> datePlannerService.recordPlannedDate(Path.of("invalid.json"), "N/A", LocalDate.now()));
+    }
+
+    @Test
     void testUniqueValues_shouldReturnFriendWithLowestCounter() {
         Friend friend = datePlannerService.planDate("src/test/resources/input/friends-with-unique-values.json");
         assertEquals("Karel", friend.getName());
@@ -50,7 +69,7 @@ class DatePlannerServiceTest {
     @Test
     void testRecordPlannedDate_shouldUpdateDateAndCounter() throws IOException {
         Files.writeString(TMP_JSON_PATH, createTmpJson());
-        datePlannerService.recordPlannedDate(TMP_JSON, "Henk", LocalDate.now());
+        datePlannerService.recordPlannedDate(TMP_JSON_PATH, "Henk", LocalDate.now());
 
         String json = Files.readString(TMP_JSON_PATH);
         Friends friends = objectMapper.readValue(json, Friends.class);

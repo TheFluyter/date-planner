@@ -42,17 +42,22 @@ public class DatePlannerService {
         }
     }
 
-    public void recordPlannedDate(String pathToFriendsJson, String name, LocalDate newDate) {
-        Path path = Path.of(pathToFriendsJson);
-        String json;
-        Friends friends;
+    public void recordPlannedDate(Path path, String name, LocalDate newDate) {
+        Friends friends = getFriends(path);
+        updateFriendWithNewDate(name, newDate, friends);
+        createNewJsonFile(friends, path);
+    }
+
+    private Friends getFriends(Path path) {
         try {
-            json = Files.readString(path);
-            friends = objectMapper.readValue(json, Friends.class);
+            String json = Files.readString(path);
+            return objectMapper.readValue(json, Friends.class);
         } catch (IOException exception) {
             throw new FriendPlanningException("Failed to record a date with friend due to an I/O error:" + exception.getMessage());
         }
+    }
 
+    private void updateFriendWithNewDate(String name, LocalDate newDate, Friends friends) {
         for (Friend friend : friends.getFriendList()) {
             if (name.equals(friend.getName())) {
                 friend.updateDateCounter();
@@ -60,7 +65,9 @@ public class DatePlannerService {
                 break;
             }
         }
+    }
 
+    private void createNewJsonFile(Friends friends, Path path) {
         ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
         String updatedJson;
         try {
